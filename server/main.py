@@ -24,7 +24,7 @@ class SummarizeRequest(BaseModel):
     instruction: str
 
 
-@app.get("/index")
+@app.get("/")
 def index():
     return {"IsRunning": True}
 
