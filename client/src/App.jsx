@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import emailjs from "emailjs-com";
+import ReactMarkdown from "react-markdown";
 
 function App() {
   const [transcript, setTranscript] = useState("");
   const [instruction, setInstruction] = useState("");
   const [summary, setSummary] = useState("");
+  const [recipient, setRecipient] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSummarize = async () => {
@@ -24,6 +27,36 @@ function App() {
       alert("Error generating summary");
     }
     setLoading(false);
+  };
+
+  const handleSendEmail = () => {
+    if (!recipient.trim() || !summary.trim()) {
+      alert("Recipient email and summary are required.");
+      return;
+    }
+
+    const templateParams = {
+      email: recipient,  // this must match EmailJS template variable
+      summary: summary,
+    };
+
+    emailjs
+      .send(
+        "service_dqsgu09",      // replace with your EmailJS service ID
+        "template_1xe0fzm",     // replace with your EmailJS template ID
+        templateParams,
+        "XLwsTCT0eb18yZp1i"     // replace with your EmailJS public key
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          alert("Email sent successfully!");
+        },
+        (error) => {
+          console.error("FAILED...", error);
+          alert("Failed to send email.");
+        }
+      );
   };
 
   return (
@@ -62,13 +95,23 @@ function App() {
 
       {summary && (
         <div className="mt-8">
-          <h3 className="text-lg font-semibold mb-2">Summary (Editable):</h3>
-          <textarea
-            value={summary}
-            onChange={(e) => setSummary(e.target.value)}
-            rows={8}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          <h3 className="text-lg font-semibold mb-2">Summary:</h3>
+          <ReactMarkdown>{summary}</ReactMarkdown>
+
+          <input
+            type="email"
+            placeholder="Recipient email"
+            value={recipient}
+            onChange={(e) => setRecipient(e.target.value)}
+            className="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
+
+          <button
+            onClick={handleSendEmail}
+            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700"
+          >
+            Send Summary
+          </button>
         </div>
       )}
     </div>
