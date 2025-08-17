@@ -17,7 +17,7 @@ function App() {
     }
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/summarize", {
+      const res = await axios.post("https://meeting-summarizer-0h37.onrender.com/summarize", {
         transcript,
         instruction,
       });
