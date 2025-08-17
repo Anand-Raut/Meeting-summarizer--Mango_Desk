@@ -36,16 +36,16 @@ function App() {
     }
 
     const templateParams = {
-      email: recipient,  // this must match EmailJS template variable
+      email: recipient,
       summary: summary,
     };
 
     emailjs
       .send(
-        "service_dqsgu09",      // replace with your EmailJS service ID
-        "template_1xe0fzm",     // replace with your EmailJS template ID
+        "service_dqsgu09", 
+        "template_1xe0fzm",
         templateParams,
-        "XLwsTCT0eb18yZp1i"     // replace with your EmailJS public key
+        "XLwsTCT0eb18yZp1i"
       )
       .then(
         (response) => {
